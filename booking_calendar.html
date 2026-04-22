@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Calendar</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            // Load bookings into the calendar
+            loadBookings(bookings);
+
+            document.getElementById('bookButton').onclick = function() {
+                const bookingDate = document.getElementById('bookingDate').value;
+                const bookingTime = document.getElementById('bookingTime').value;
+                if (bookingDate && bookingTime) {
+                    bookings.push({ date: bookingDate, time: bookingTime });
+                    localStorage.setItem('bookings', JSON.stringify(bookings));
+                    loadBookings(bookings);
+                }
+            };
+        });
+
+        function loadBookings(bookings) {
+            const bookingsList = document.getElementById('bookingsList');
+            bookingsList.innerHTML = '';
+            bookings.forEach(booking => {
+                const li = document.createElement('li');
+                li.textContent = `${booking.date} at ${booking.time}`;
+                bookingsList.appendChild(li);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Booking Calendar</h1>
+    <input type="date" id="bookingDate" />
+    <input type="time" id="bookingTime" />
+    <button id="bookButton">Book</button>
+    <h2>Your Bookings:</h2>
+    <ul id="bookingsList"></ul>
+</body>
+</html>
