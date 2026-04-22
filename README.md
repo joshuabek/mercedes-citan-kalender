@@ -1,21 +1,43 @@
-# Mercedes Citan Booking Calendar
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking calender</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+            // Load bookings into the calendar
+            loadBookings(bookings);
 
-## How to Access the Calendar Online
-To access the booking calendar, visit the following URL: [Insert Calendar Link Here]
+            document.getElementById('bookButton').onclick = function() {
+                const bookingDate = document.getElementById('bookingDate').value;
+                const bookingTime = document.getElementById('bookingTime').value;
+                if (bookingDate && bookingTime) {
+                    bookings.push({ date: bookingDate, time: bookingTime });
+                    localStorage.setItem('bookings', JSON.stringify(bookings));
+                    loadBookings(bookings);
+                }
+            };
+        });
 
-## How to Create/Edit/Delete Bookings
-- **Creating a Booking**: Click on the desired time slot in the calendar and fill out the necessary information in the booking form. 
-- **Editing a Booking**: Select the booking you wish to edit, make the necessary changes, and save your updates. 
-- **Deleting a Booking**: To delete a booking, click on the booking and select the delete option.
-
-## Different View Options
-The booking calendar offers three view options:
-- **Month View**: Displays the entire month with all bookings.
-- **Week View**: Focuses on the current week and showcases detailed bookings for each day.
-- **Day View**: Provides a closer look at a single day's schedule, allowing for easier management of that day's bookings.
-
-## LocalStorage Persistence
-The calendar uses localStorage to save your booking data. This means that your bookings will persist even after you refresh the page or close your browser. However, please note that this data is stored locally in your browser.
-
-## Note on Bookings
-All bookings are stored in your browser's localStorage and can be accessed by team members who use the same calendar link. Make sure to share the link with your team to ensure everyone can view and manage bookings accordingly.
+        function loadBookings(bookings) {
+            const bookingsList = document.getElementById('bookingsList');
+            bookingsList.innerHTML = '';
+            bookings.forEach(booking => {
+                const li = document.createElement('li');
+                li.textContent = `${booking.date} at ${booking.time}`;
+                bookingsList.appendChild(li);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Booking Calendar</h1>
+    <input type="date" id="bookingDate" />
+    <input type="time" id="bookingTime" />
+    <button id="bookButton">Book</button>
+    <h2>Your Bookings:</h2>
+    <ul id="bookingsList"></ul>
+</body>
+</html>
